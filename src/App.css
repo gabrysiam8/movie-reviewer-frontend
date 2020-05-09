@@ -33,3 +33,29 @@
   text-align: center;
   margin-top: 20px;
 }
+
+.StartPage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  flex-direction: column;
+}
+
+.movieTable {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.movieCardWrapper {
+  display: inline-block;
+  flex-grow: 1;
+  flex: 1 1 30%;
+  margin: 20px;
+}
+
+.movieCard {
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+}
