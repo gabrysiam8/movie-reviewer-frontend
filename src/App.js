@@ -1,8 +1,12 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React , { Component } from 'react';
+import { Switch } from 'react-router-dom';
 import './App.css';
 import AuthService from './service/AuthService';
-import MainMenu from './components/MainMenu'
+import AppliedRoute from './components/route/AppliedRoute';
+import MainMenu from './components/MainMenu';
+import LoginForm from './components/auth/LoginForm';
+import RegisterForm from './components/auth/RegisterForm';
 
 class App extends Component {
 
@@ -40,6 +44,10 @@ class App extends Component {
     return (
       <div className="App">
         <MainMenu {...childProps}/>
+        <Switch>
+          <AppliedRoute path="/login" exact component={LoginForm} props={childProps}/>
+          <AppliedRoute path="/register" exact component={RegisterForm} props={childProps}/>
+        </Switch>
       </div>
     );
   }

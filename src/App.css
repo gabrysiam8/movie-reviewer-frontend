@@ -2,11 +2,6 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
 .MainMenu {
   box-shadow: 3px 3px 3px rgb(170, 170, 170);
 }
@@ -18,4 +13,23 @@
 
 .logoPart{
   color: #1fc2db;
+}
+
+.LoginForm, .RegisterForm, .ChangePasswordForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 5px;
+  margin-top: 50px;
+}
+
+.RegisterForm input, .ChangePasswordForm input {
+  margin-bottom: 25px;
+}
+
+.dangerAlert {
+  display: inline-block;
+  text-align: center;
+  margin-top: 20px;
 }
