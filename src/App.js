@@ -4,11 +4,13 @@ import { Switch } from 'react-router-dom';
 import './App.css';
 import AuthService from './service/AuthService';
 import AppliedRoute from './components/route/AppliedRoute';
+import AuthenticatedRoute from './components/route/AuthenticatedRoute';
 import StartPage from './components/StartPage';
 import MainMenu from './components/MainMenu';
 import LoginForm from './components/auth/LoginForm';
 import RegisterForm from './components/auth/RegisterForm';
 import MovieDetailsPage from './components/MovieDetailsPage';
+import ChangePasswordForm from './components/user/ChangePasswordForm';
 
 class App extends Component {
 
@@ -51,6 +53,7 @@ class App extends Component {
           <AppliedRoute path="/login" exact component={LoginForm} props={childProps}/>
           <AppliedRoute path="/register" exact component={RegisterForm} props={childProps}/>
           <AppliedRoute path="/movie/:movieId" exact component={MovieDetailsPage} props={childProps}/>
+          <AuthenticatedRoute path="/user/me/password" exact component={ChangePasswordForm}/>
         </Switch>
       </div>
     );

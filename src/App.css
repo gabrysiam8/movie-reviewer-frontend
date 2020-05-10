@@ -34,7 +34,7 @@
   margin-top: 20px;
 }
 
-.StartPage {
+.StartPage, .UserProfile {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -62,7 +62,7 @@
   margin: 20px;
 }
 
-.movieCard {
+.movieCard, .userCard {
   align-items: center;
   padding: 20px;
   text-align: center;
@@ -99,4 +99,12 @@ th, td {
 
 .commentHeader {
   margin: 0px 10px;
+}
+
+.countersWrapper{
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  width: 100%;
+  margin: 20px;
 }
