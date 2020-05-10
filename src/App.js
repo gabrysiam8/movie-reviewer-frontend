@@ -50,7 +50,7 @@ class App extends Component {
           <AppliedRoute path="/" exact component={StartPage} props={childProps}/>
           <AppliedRoute path="/login" exact component={LoginForm} props={childProps}/>
           <AppliedRoute path="/register" exact component={RegisterForm} props={childProps}/>
-          <AppliedRoute path="/movie/:movieId" exact component={MovieDetailsPage}/>
+          <AppliedRoute path="/movie/:movieId" exact component={MovieDetailsPage} props={childProps}/>
         </Switch>
       </div>
     );

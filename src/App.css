@@ -12,7 +12,7 @@
 }
 
 .logoPart{
-  color: #1fc2db;
+  color: #17a2b8;
 }
 
 .LoginForm, .RegisterForm, .ChangePasswordForm {
@@ -42,6 +42,14 @@
   flex-direction: column;
 }
 
+.pageTitle {
+  font-weight: bold;
+  font-size: 70px;
+  font-variant-caps: small-caps;
+  text-shadow: 4px 2px 0px rgb(189, 189, 189);
+  margin-bottom: 50px;
+}
+
 .movieTable {
   display: flex;
   flex-wrap: wrap;
@@ -58,4 +66,37 @@
   align-items: center;
   padding: 20px;
   text-align: center;
+}
+
+.MovieDetailsPage {
+  padding: 50px 300px;
+}
+
+.movieDetailsWrapper {
+  text-align: left;
+  margin: 0px 150px 100px;
+}
+
+th, td {
+  min-width: 200%;
+}
+
+.comment {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  text-align: left;
+  margin-top: 20px;
+}
+
+.mr-auto {
+  margin-left: 10px;
+}
+
+.row {
+  justify-content: center;
+}
+
+.commentHeader {
+  margin: 0px 10px;
 }

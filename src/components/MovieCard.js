@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, Button} from 'react-bootstrap';
+import { Card, Button, Badge } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilm } from '@fortawesome/free-solid-svg-icons';
 import StarRatings from 'react-star-ratings';
@@ -23,7 +23,7 @@ export class MovieCard extends Component {
             <Card className="movieCard">
                 <FontAwesomeIcon icon={faFilm} size="6x" />
                 <Card.Body>
-                    <Card.Title>{this.props.movie.title}</Card.Title>
+                    <h2><Badge variant="dark">{this.props.movie.title}</Badge></h2>
                     <p>{this.props.movie.genre}</p>
                     <StarRatings
                         rating={this.props.movie.avgRating}
@@ -42,7 +42,7 @@ export class MovieCard extends Component {
                     </div>
                     :
                     <div className="buttonsWrapper">
-                        <Button variant="info"  onClick={this.routeChange}>Get more info...</Button>
+                        <Button variant="outline-info"  onClick={this.routeChange}>Get more info...</Button>
                     </div>
                 }
             </Card>

@@ -33,7 +33,7 @@ class StartPage extends Component {
         return (
             <div className="StartPage">
                 <div className="pageTitle">
-                    <h1>Discover movies</h1>
+                    <span className="logoPart">Discover movies</span>
                 </div>
                 {loading ?
                     <Spinner animation="border" variant="info" />
