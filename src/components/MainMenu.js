@@ -1,4 +1,3 @@
-  
 import React, { Component } from 'react';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,7 +6,6 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 class MainMenu extends Component {
 
     render() {
-
         return (
             <div className="MainMenu">
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -16,6 +14,7 @@ class MainMenu extends Component {
                     ?
                     <Nav className="mr-auto">
                         <Nav.Link href="/">Home</Nav.Link>
+                        { this.props.isAuthenticated ? <Nav.Link href="/movie">My movies</Nav.Link> : null }
                     </Nav>
                     : null
                 }

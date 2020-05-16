@@ -9,8 +9,9 @@ import StartPage from './components/StartPage';
 import MainMenu from './components/MainMenu';
 import LoginForm from './components/auth/LoginForm';
 import RegisterForm from './components/auth/RegisterForm';
-import MovieDetailsPage from './components/MovieDetailsPage';
+import MovieDetailsPage from './components/movie/MovieDetailsPage';
 import ChangePasswordForm from './components/user/ChangePasswordForm';
+import UserMoviePage from './components/UserMoviePage';
 
 class App extends Component {
 
@@ -36,7 +37,7 @@ class App extends Component {
   handleLogout() {
       AuthService
           .logout();
-      this.userHasAuthenticated(false );
+      this.userHasAuthenticated(false);
   }
 
   render() {
@@ -54,6 +55,7 @@ class App extends Component {
           <AppliedRoute path="/register" exact component={RegisterForm} props={childProps}/>
           <AppliedRoute path="/movie/:movieId" exact component={MovieDetailsPage} props={childProps}/>
           <AuthenticatedRoute path="/user/me/password" exact component={ChangePasswordForm}/>
+          <AuthenticatedRoute path="/movie" exact component={UserMoviePage}/>
         </Switch>
       </div>
     );
