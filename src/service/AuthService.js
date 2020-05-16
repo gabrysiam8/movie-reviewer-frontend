@@ -29,6 +29,10 @@ class AuthService {
         let user = localStorage.getItem(USERNAME_ATTRIBUTE_NAME);
         return user !== null;
     }
+
+    getCurrentUser() {
+        return API.get("user/me");
+    }
 }
 
 export default new AuthService();

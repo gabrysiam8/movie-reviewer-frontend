@@ -1,30 +1,37 @@
 import React , {Component} from 'react';
-import API from '../utils/API';
+import API from '../../utils/API';
 import { Spinner, Jumbotron, Table, Button, Row } from 'react-bootstrap';
-import Comment from './Comment';
-import NewCommentModal from './NewCommentModal';
+import Comment from '../comment/Comment';
+import CommentModal from '../comment/CommentModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import AuthService from '../../service/AuthService';
 
-class StartPage extends Component {
+class MovieDetailsPage extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
             loading: true,
+            currentUserId: "",
             movie: { id: this.props.match.params.movieId },
             commentCounter: 5,
-            commentModal: null
+            commentModal: null,
+            enableAddComment: true
         };
 
         this.handleAddComment = this.handleAddComment.bind(this);
         this.hideModal = this.hideModal.bind(this);
+        this.disableAddComment = this.disableAddComment.bind(this);
+        this.loadCurrentUser = this.loadCurrentUser.bind(this);
+        this.loadMovie = this.loadMovie.bind(this);
     }
 
     handleAddComment(event) {
+        event.preventDefault();
         this.setState({
-            commentModal: <NewCommentModal hide={this.hideModal} movieId={this.state.movie.id}/>
+            commentModal: <CommentModal hide={this.hideModal} movieId={this.state.movie.id} edit={false} reloadMovie={this.loadMovie}/>
         });
     }
 
@@ -34,8 +41,29 @@ class StartPage extends Component {
         });
     }
 
-    componentDidMount() {
-        this.setState({ loading: true }, () => {
+    disableAddComment() {
+        this.setState({
+            enableAddComment: false
+        });
+    }
+
+    loadCurrentUser() {
+        if(this.props.isAuthenticated && this.state.currentUserId==="") {
+            AuthService
+                .getCurrentUser()
+                .then(res => {
+                    this.setState({
+                        currentUserId: res.data.id
+                    });
+                })
+                .catch(err => {
+                    console.log(err.response.data);
+                });
+        }
+    }
+
+    loadMovie() {
+        this.setState({ loading: true, enableAddComment: true }, () => {
             API.get('/movie/'+this.state.movie.id)
                 .then(res => {
                     this.setState({ 
@@ -49,8 +77,17 @@ class StartPage extends Component {
         });
     }
 
+    componentDidUpdate() {
+        this.loadCurrentUser();
+    }
+
+    componentDidMount() {
+        this.loadCurrentUser();
+        this.loadMovie();
+    }
+
     render() {
-        const { loading, movie, commentCounter } = this.state;
+        const { loading, currentUserId, movie, enableAddComment } = this.state;
         return (
             <div className="MovieDetailsPage">
                 {loading ?
@@ -85,15 +122,28 @@ class StartPage extends Component {
                             <div className="commentsWrapper">
                             <Row >
                                 <h2 className="commentHeader">COMMENTS</h2>
-                                {this.props.isAuthenticated ?
-                                <Button variant="outline-success" onClick={this.handleAddComment} className="addCommentButton">
-                                    <FontAwesomeIcon icon={faPlus} color="black"/>
-                                </Button>
-                                :
-                                null
+                                { this.props.isAuthenticated && enableAddComment ?
+                                    <Button variant="outline-success" onClick={this.handleAddComment} className="addCommentButton">
+                                        <FontAwesomeIcon icon={faPlus} color="black"/>
+                                    </Button>
+                                    :
+                                    null
                                 }
                             </Row>
-                            { movie.commentIds.slice(commentCounter*(-1)).map(commentId => <Comment key={commentId} commentId={commentId}></Comment>) }
+                            { movie.commentIds
+                                .slice()
+                                .reverse()
+                                .map(commentId => 
+                                    <Comment 
+                                        key={commentId} 
+                                        disableAddComment={this.disableAddComment} 
+                                        currentUserId={currentUserId} 
+                                        commentId={commentId} 
+                                        movieId={movie.id}
+                                        reloadMovie={this.loadMovie}
+                                    />
+                                ) 
+                            }
                             </div>
                     </Jumbotron>
                 }
@@ -103,4 +153,4 @@ class StartPage extends Component {
     }
 }
 
-export default StartPage;
+export default MovieDetailsPage;

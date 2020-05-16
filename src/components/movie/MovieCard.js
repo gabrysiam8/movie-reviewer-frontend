@@ -4,16 +4,48 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilm } from '@fortawesome/free-solid-svg-icons';
 import StarRatings from 'react-star-ratings';
 import { withRouter } from 'react-router-dom';
+import API from '../../utils/API';
+import MovieModal from './MovieModal';
 
 export class MovieCard extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            movieModal: null
+        };
 
-        this.routeChange = this.routeChange.bind(this);
+        this.handleEditMovie = this.handleEditMovie.bind(this);
+        this.handleDeleteMovie = this.handleDeleteMovie.bind(this);
+        this.hideModal = this.hideModal.bind(this);
+        this.handleShowDetails = this.handleShowDetails.bind(this);
     }
     
-    routeChange() {
+    handleEditMovie(event) {
+        event.preventDefault();
+        this.setState({
+            movieModal: <MovieModal hide={this.hideModal} movie={this.props.movie} edit={true} reloadMovies={this.props.reloadMovies}/>
+        });
+    }
+
+    handleDeleteMovie(event) {
+        event.preventDefault();
+        API.delete('/movie/'+this.props.movie.id)
+            .then(res => {
+                this.props.reloadMovies();
+            })
+            .catch(err => {
+                console.log(err.response);
+            });
+    }
+
+    hideModal() {
+        this.setState({
+            movieModal: null
+        });
+    }
+
+    handleShowDetails() {
         this.props.history.push("/movie/"+this.props.movie.id);
     }
 
@@ -37,15 +69,16 @@ export class MovieCard extends Component {
                 </Card.Body>
                 {this.props.editable ?
                     <div className="buttonsWrapper">
-                        <Button variant="info" onClick={(e) => this.props.onUpdate(e, this.props.movie.id)}>Edit</Button> 
-                        <Button variant="danger" onClick={(e) => this.props.onDelete(e, this.props.movie.id)}>Delete</Button> 
+                        <Button variant="outline-info" onClick={this.handleEditMovie} className="movieButton">Edit</Button> 
+                        <Button variant="outline-danger" onClick={this.handleDeleteMovie} className="movieButton">Delete</Button> 
                     </div>
                     :
                     <div className="buttonsWrapper">
-                        <Button variant="outline-info"  onClick={this.routeChange}>Get more info...</Button>
+                        <Button variant="outline-info"  onClick={this.handleShowDetails}>Get more info...</Button>
                     </div>
                 }
             </Card>
+            {this.state.movieModal}
             </div>
         )
     }

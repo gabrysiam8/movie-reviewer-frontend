@@ -1,6 +1,6 @@
 import React , {Component} from 'react';
 import API from '../utils/API';
-import MovieCard from './MovieCard';
+import MovieCard from './movie/MovieCard';
 import { Spinner } from 'react-bootstrap';
 
 class StartPage extends Component {
@@ -15,7 +15,7 @@ class StartPage extends Component {
 
     componentDidMount() {
         this.setState({ loading: true }, () => {
-            API.get('/movie')
+            API.get('/movie/all')
                 .then(res => {
                     this.setState({ 
                         loading: false,

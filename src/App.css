@@ -34,7 +34,7 @@
   margin-top: 20px;
 }
 
-.StartPage, .UserProfile {
+.StartPage, .UserMoviePage, .UserProfile {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -107,4 +107,12 @@ th, td {
   align-items: stretch;
   width: 100%;
   margin: 20px;
+}
+
+.buttonsWrapper {
+  margin: 0px 10px;
+}
+
+.movieButton {
+  margin: 5px;
 }
