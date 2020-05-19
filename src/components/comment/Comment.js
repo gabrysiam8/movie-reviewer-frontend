@@ -59,9 +59,6 @@ export class Comment extends Component {
     async getComment() {
         return API.get('/comment/'+this.props.commentId)
             .then(res => {
-                if(res.data.authorId === this.props.currentUserId) {
-                    this.props.disableAddComment();
-                }
                 this.setState({ 
                     comment: res.data,
                     editable: res.data.authorId === this.props.currentUserId
@@ -91,41 +88,45 @@ export class Comment extends Component {
     }
 
     render() {
-        const { comment, editable } = this.state;
+        const { loading, comment, editable } = this.state;
         return (
             <div className="comment">
-                <Toast style={{ minWidth: '80%'}}>
-                <Toast.Header closeButton={false}>
-                    <FontAwesomeIcon icon={faUser} color="black" size="2x"/>
-                    <strong className="mr-auto">{comment.authorUsername}</strong>
-                    { AuthService.isAuthenticated() && editable ? 
-                        <div className="buttonsWrapper">
-                            <Button variant="outline-light" onClick={this.handleEditComment} className="commentButton">
-                                <FontAwesomeIcon icon={faPen} color="black"/>
-                            </Button>
-                            <Button variant="outline-light" onClick={this.handleDeleteComment} className="commentButton">
-                                <FontAwesomeIcon icon={faTrash} color="black"/>
-                            </Button>
+                {loading ?
+                    null
+                    :
+                    <Toast style={{ minWidth: '80%'}}>
+                    <Toast.Header closeButton={false}>
+                        <FontAwesomeIcon icon={faUser} color="black" size="2x"/>
+                        <strong className="mr-auto">{comment.authorUsername}</strong>
+                        { AuthService.isAuthenticated() && editable ? 
+                            <div className="buttonsWrapper">
+                                <Button variant="outline-light" onClick={this.handleEditComment} className="commentButton">
+                                    <FontAwesomeIcon icon={faPen} color="black"/>
+                                </Button>
+                                <Button variant="outline-light" onClick={this.handleDeleteComment} className="commentButton">
+                                    <FontAwesomeIcon icon={faTrash} color="black"/>
+                                </Button>
+                            </div>
+                        : 
+                            null
+                        }
+                        <small>{ moment(comment.addDate).format('DD-MMM-YYYY') }</small>
+                    </Toast.Header>
+                    <Toast.Body>
+                        <div>
+                            <StarRatings
+                                rating={comment.rating}
+                                starRatedColor="#fff200"
+                                numberOfStars={10}
+                                name='rating'
+                                starDimension="15px"
+                                starSpacing="2px"
+                            />
                         </div>
-                    : 
-                        null
-                    }
-                    <small>{ moment(comment.addDate).format('DD-MMM-YYYY') }</small>
-                </Toast.Header>
-                <Toast.Body>
-                    <div>
-                        <StarRatings
-                            rating={comment.rating}
-                            starRatedColor="#fff200"
-                            numberOfStars={10}
-                            name='rating'
-                            starDimension="15px"
-                            starSpacing="2px"
-                        />
-                    </div>
-                    {comment.text}
-                </Toast.Body>
-                </Toast>
+                        {comment.text}
+                    </Toast.Body>
+                    </Toast>
+                }
                 {this.state.commentModal}
             </div>
         )

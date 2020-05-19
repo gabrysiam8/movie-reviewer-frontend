@@ -9,9 +9,11 @@ import StartPage from './components/StartPage';
 import MainMenu from './components/MainMenu';
 import LoginForm from './components/auth/LoginForm';
 import RegisterForm from './components/auth/RegisterForm';
+import ResetPasswordForm from './components/auth/ResetPasswordForm';
 import MovieDetailsPage from './components/movie/MovieDetailsPage';
 import ChangePasswordForm from './components/user/ChangePasswordForm';
 import UserMoviePage from './components/UserMoviePage';
+import AccountVerificationPage from './components/auth/AccountVerificationPage';
 
 class App extends Component {
 
@@ -53,6 +55,8 @@ class App extends Component {
           <AppliedRoute path="/" exact component={StartPage} props={childProps}/>
           <AppliedRoute path="/login" exact component={LoginForm} props={childProps}/>
           <AppliedRoute path="/register" exact component={RegisterForm} props={childProps}/>
+          <AppliedRoute path="/resetPassword" exact component={ResetPasswordForm}/>
+          <AppliedRoute path="/confirmation" exact component={AccountVerificationPage}/>
           <AppliedRoute path="/movie/:movieId" exact component={MovieDetailsPage} props={childProps}/>
           <AuthenticatedRoute path="/user/me/password" exact component={ChangePasswordForm}/>
           <AuthenticatedRoute path="/movie" exact component={UserMoviePage}/>

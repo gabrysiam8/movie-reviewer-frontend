@@ -52,7 +52,6 @@ class ChangePasswordForm extends Component {
                             message: res.data,
                             alertVariant: "success"
                         });
-                        this.refs.btn.removeAttribute("disabled");
                     })
                     .catch(err => {
                         this.setState({
