@@ -29,7 +29,7 @@ class MovieDetailsPage extends Component {
     handleAddComment(event) {
         event.preventDefault();
         this.setState({
-            commentModal: <CommentModal hide={this.hideModal} movieId={this.state.movie.id} edit={false} reloadMovie={this.loadMovie}/>
+            commentModal: <CommentModal hide={this.hideModal} movieId={this.state.movie.id} edit={false} />
         });
     }
 

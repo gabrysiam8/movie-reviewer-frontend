@@ -65,8 +65,7 @@ export class CommentModal extends Component {
             API
                 .put("/review/"+this.props.movieId+"/comment/"+comment.id, comment)
                 .then(res => {
-                    this.props.reloadMovie();
-                    this.props.hide();
+                    window.location.reload(false);
                 })
                 .catch(err => {
                     console.log(err.response);
