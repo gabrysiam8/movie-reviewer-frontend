@@ -33,8 +33,7 @@ export class Comment extends Component {
                     hide={this.hideModal} 
                     comment={this.state.comment} 
                     movieId={this.props.movieId} 
-                    edit={true} 
-                    reloadMovie={this.props.reloadMovie}
+                    edit={true}
                 />
         });
     }
