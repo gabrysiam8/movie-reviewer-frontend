@@ -1,11 +1,8 @@
 import React , {Component} from 'react';
 import API from '../../utils/API';
-import { Spinner, Jumbotron, Table, Button, Row } from 'react-bootstrap';
-import Comment from '../comment/Comment';
-import CommentModal from '../comment/CommentModal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { Spinner, Jumbotron, Table } from 'react-bootstrap';
 import AuthService from '../../service/AuthService';
+import CommentList from '../comment/CommentList';
 
 class MovieDetailsPage extends Component {
 
@@ -15,28 +12,11 @@ class MovieDetailsPage extends Component {
         this.state = {
             loading: true,
             currentUserId: "",
-            movie: { id: props.match.params.movieId },
-            commentCounter: 5,
-            commentModal: null
+            movie: { id: props.match.params.movieId }
         };
 
-        this.handleAddComment = this.handleAddComment.bind(this);
-        this.hideModal = this.hideModal.bind(this);
         this.loadCurrentUser = this.loadCurrentUser.bind(this);
         this.loadMovie = this.loadMovie.bind(this);
-    }
-
-    handleAddComment(event) {
-        event.preventDefault();
-        this.setState({
-            commentModal: <CommentModal hide={this.hideModal} movieId={this.state.movie.id} edit={false} />
-        });
-    }
-
-    hideModal() {
-        this.setState({
-            commentModal: null
-        });
     }
 
     loadCurrentUser() {
@@ -79,7 +59,8 @@ class MovieDetailsPage extends Component {
     }
 
     render() {
-        const { loading, currentUserId, movie, commentModal } = this.state;
+        const { loading, movie } = this.state;
+        
         return (
             <div className="MovieDetailsPage">
                 {loading ?
@@ -111,34 +92,15 @@ class MovieDetailsPage extends Component {
                             </tbody>
                             </Table>
                             </div>
-                            <div className="commentsWrapper">
-                            <Row >
-                                <h2 className="commentHeader">COMMENTS</h2>
-                                { movie.canComment ?
-                                    <Button variant="outline-success" onClick={this.handleAddComment} className="addCommentButton">
-                                        <FontAwesomeIcon icon={faPlus} color="black"/>
-                                    </Button>
-                                    :
-                                    null
-                                }
-                            </Row>
-                            { movie.commentIds
-                                .slice()
-                                .reverse()
-                                .map(commentId => 
-                                    <Comment 
-                                        key={commentId} 
-                                        currentUserId={currentUserId} 
-                                        commentId={commentId} 
-                                        movieId={movie.id}
-                                        reloadMovie={this.loadMovie}
-                                    />
-                                ) 
-                            }
-                            </div>
+                            <CommentList 
+                                currentUserId={this.state.currentUserId} 
+                                commentIds={this.state.movie.commentIds} 
+                                movieId={this.state.movie.id}
+                                canComment={this.state.movie.canComment}
+                                reloadMovie={this.loadMovie}
+                            />
                     </Jumbotron>
                 }
-                {commentModal}
             </div>
         );
     }
