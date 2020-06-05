@@ -1,0 +1,142 @@
+@startuml
+
+class App << (C,blue) component >> {
+    ==state==
+    # isAuthenticated
+}
+
+class MainMenu << (C,blue) component >> {
+}
+
+App o-- MainMenu
+
+class StartPage << (C,blue) component >> {
+    ==state==
+    # movies
+    ==props==
+}
+
+class MovieCard << (C,blue) component >> {
+    ==state==
+    # movieModal
+    ==props==
+    # movie
+}
+
+StartPage o-- MovieCard
+
+class MovieDetailsPage << (C,blue) component >> {
+    ==state==
+    # currentUserId
+    # movie
+    # commentModal
+    ==props==
+    # movie
+}
+
+class Comment << (C,blue) component >> {
+    ==state==
+    # comment
+    # editable
+    # commentModal
+    ==props==
+    # currentUserId
+    # commentId
+    # movieId
+    # reloadMovie
+}
+
+class CommentModal << (C,blue) component >> {
+    ==state==
+    # comment
+    # validated
+    ==props==
+    # hide
+    # comment
+    # movieId
+    # edit
+}
+
+
+MovieDetailsPage o-- Comment
+Comment "handleEditComment" o-- CommentModal 
+MovieDetailsPage "handleAddComment" o-- CommentModal
+
+class UserMoviePage << (C,blue) component >> {
+    ==state==
+    # movies
+    # movieModal
+}
+
+class MovieModal << (C,blue) component >> {
+    ==state==
+    # movie
+    # validated
+     ==props==
+    # hide
+    # movie
+    # reloadMovies
+    # edit
+}
+
+MovieCard "handleEditMovie" o-- MovieModal
+UserMoviePage "showAddModal" o-- MovieModal
+
+class LoginForm << (C,blue) component >> {
+    ==state==
+    # username
+    # password
+    # emailModal
+    # showMessage
+    # message
+    # validated
+}
+
+class EmailModal << (C,blue) component >> {
+    ==state==
+    # email
+    # showMessage
+    # message
+    # validated
+    # confirmation
+}
+
+LoginForm "handleForgotPassword" o-- EmailModal
+
+class RegisterForm << (C,blue) component >> {
+    ==state==
+    # username
+    # email
+    # password
+    # passwordConfirmation
+    # emailModal
+    # showMessage
+    # message
+    # validated
+}
+
+RegisterForm "handleSubmit" o-- EmailModal
+
+class ResetPasswordForm << (C,blue) component >> {
+    ==state==
+    # userId
+    # newPassword
+    # passwordConfirmation
+    # showForm
+    # showMessage
+    # message
+    # validated
+}
+
+class ChangePasswordForm << (C,blue) component >> {
+    ==state==
+    # oldPassword
+    # newPassword
+    # passwordConfirmation
+    # alertVariant
+    # showMessage
+    # message
+    # validated
+}
+
+@enduml
