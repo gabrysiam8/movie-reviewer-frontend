@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Button, Row, Spinner } from 'react-bootstrap';
 import Comment from './Comment';
+import API from '../../utils/API';
 import CommentModal from './CommentModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -24,7 +25,7 @@ export class CommentList extends Component {
     handleAddComment(event) {
         event.preventDefault();
         this.setState({
-            commentModal: <CommentModal hide={this.hideModal} movieId={this.props.movieId} edit={false} reloadMovie={this.props.reloadMovie}/>
+            commentModal: <CommentModal hide={this.hideModal} movieId={this.props.movieId} edit={false}/>
         });
     }
 
@@ -34,19 +35,44 @@ export class CommentList extends Component {
         });
     }
 
+    async getCommentsWithoutUser() {
+        return API.get('/review/'+this.props.movieId)
+            .then(res => {
+                return res.data;
+            })
+            .catch(err => {
+                this.setState({ loading: false });
+            });
+    }
+
+    async getUser(userId) {
+        return API.get('/user/'+userId)
+            .then(res => {
+                return res.data.username;
+            })
+            .catch(err => {
+                this.setState({ loading: false });
+            });
+            
+    }
+
     async getComments() {
-        return Promise.all(this.props.commentIds
-            .slice()
-            .reverse()
-            .map(commentId => 
-                <Comment 
-                    key={commentId} 
-                    currentUserId={this.props.currentUserId} 
-                    commentId={commentId} 
-                    movieId={this.props.movieId}
-                    reloadMovie={this.props.reloadMovie}
-                />
-            ));
+        return this.getCommentsWithoutUser().then(res =>{
+            return Promise.all(
+                res.slice()
+                    .reverse()
+                    .map(comment => {
+                        return this.getUser(comment.authorId).then(username => {
+                            return {
+                                ...comment,
+                                editable: comment.authorId === this.props.currentUserId,
+                                authorUsername: username
+                            };
+                        });
+                        
+                    })
+            );
+        });
     }
 
     componentDidMount() {
@@ -76,7 +102,14 @@ export class CommentList extends Component {
                             null
                         }
                     </Row>
-                    {comments}
+                    {comments.map(comment =>
+                        <Comment 
+                            key={comment.id} 
+                            currentUserId={this.props.currentUserId} 
+                            comment={comment} 
+                            movieId={this.props.movieId}
+                        />
+                    )}
                     </div>
                 }
                 {commentModal}

@@ -97,7 +97,6 @@ class MovieDetailsPage extends Component {
                                 commentIds={this.state.movie.commentIds} 
                                 movieId={this.state.movie.id}
                                 canComment={this.state.movie.canComment}
-                                reloadMovie={this.loadMovie}
                             />
                     </Jumbotron>
                 }

@@ -14,9 +14,6 @@ export class Comment extends Component {
         super(props);
 
         this.state = {
-            loading: true,
-            comment: {},
-            editable: false,
             commentModal: null
         };
 
@@ -31,7 +28,7 @@ export class Comment extends Component {
             commentModal: 
                 <CommentModal 
                     hide={this.hideModal} 
-                    comment={this.state.comment} 
+                    comment={this.props.comment} 
                     movieId={this.props.movieId} 
                     edit={true}
                 />
@@ -40,9 +37,9 @@ export class Comment extends Component {
 
     handleDeleteComment(event) {
         event.preventDefault();
-        API.delete('/review/'+this.props.movieId+'/comment/'+this.props.commentId)
+        API.delete('/review/'+this.props.movieId+'/comment/'+this.props.comment.id)
             .then(res => {
-                this.props.reloadMovie();
+                window.location.reload(false);
             })
             .catch(err => {
                 console.log(err.response);
@@ -55,77 +52,42 @@ export class Comment extends Component {
         });
     }
 
-    async getComment() {
-        return API.get('/comment/'+this.props.commentId)
-            .then(res => {
-                this.setState({ 
-                    comment: res.data,
-                    editable: res.data.authorId === this.props.currentUserId
-                });
-            })
-            .catch(err => {
-                console.log(err.response);
-            });
-    }
-    
-    componentDidMount() {
-        this.setState({ loading: true }, () => {
-            this.getComment()
-            .then(() => {
-                API.get('/user/'+this.state.comment.authorId)
-                    .then(res => {
-                        this.setState({ 
-                            loading: false,
-                            comment: {...this.state.comment, authorUsername: res.data.username} 
-                        });
-                    })
-                    .catch(err => {
-                        this.setState({ loading: false });
-                    });
-                });
-        });
-    }
-
     render() {
-        const { loading, comment, editable } = this.state;
+        const { comment } = this.props;
         return (
             <div className="comment">
-                {loading ?
-                    null
-                    :
-                    <Toast style={{ minWidth: '80%'}}>
-                    <Toast.Header closeButton={false}>
-                        <FontAwesomeIcon icon={faUser} color="black" size="2x"/>
-                        <strong className="mr-auto">{comment.authorUsername}</strong>
-                        { AuthService.isAuthenticated() && editable ? 
-                            <div className="buttonsWrapper">
-                                <Button variant="outline-light" onClick={this.handleEditComment} className="commentButton">
-                                    <FontAwesomeIcon icon={faPen} color="black"/>
-                                </Button>
-                                <Button variant="outline-light" onClick={this.handleDeleteComment} className="commentButton">
-                                    <FontAwesomeIcon icon={faTrash} color="black"/>
-                                </Button>
-                            </div>
-                        : 
-                            null
-                        }
-                        <small>{ moment(comment.addDate).format('DD-MMM-YYYY') }</small>
-                    </Toast.Header>
-                    <Toast.Body>
-                        <div>
-                            <StarRatings
-                                rating={comment.rating}
-                                starRatedColor="#fff200"
-                                numberOfStars={10}
-                                name='rating'
-                                starDimension="15px"
-                                starSpacing="2px"
-                            />
+                <Toast style={{ minWidth: '80%'}}>
+                <Toast.Header closeButton={false}>
+                    <FontAwesomeIcon icon={faUser} color="black" size="2x"/>
+                    <strong className="mr-auto">{comment.authorUsername}</strong>
+                    { AuthService.isAuthenticated() && comment.editable ? 
+                        <div className="buttonsWrapper">
+                            <Button variant="outline-light" onClick={this.handleEditComment} className="commentButton">
+                                <FontAwesomeIcon icon={faPen} color="black"/>
+                            </Button>
+                            <Button variant="outline-light" onClick={this.handleDeleteComment} className="commentButton">
+                                <FontAwesomeIcon icon={faTrash} color="black"/>
+                            </Button>
                         </div>
-                        {comment.text}
-                    </Toast.Body>
-                    </Toast>
-                }
+                    : 
+                        null
+                    }
+                    <small>{ moment(comment.addDate).format('DD-MMM-YYYY') }</small>
+                </Toast.Header>
+                <Toast.Body>
+                    <div>
+                        <StarRatings
+                            rating={comment.rating}
+                            starRatedColor="#fff200"
+                            numberOfStars={10}
+                            name='rating'
+                            starDimension="15px"
+                            starSpacing="2px"
+                        />
+                    </div>
+                    {comment.text}
+                </Toast.Body>
+                </Toast>
                 {this.state.commentModal}
             </div>
         )
